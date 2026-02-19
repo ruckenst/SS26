@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.30)
-project(D1D2)
+project(SS26)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(D1D2 main.cpp)
+add_executable(SS26
+        main.cpp
+        Shape.cpp
+)
