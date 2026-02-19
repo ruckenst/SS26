@@ -1,39 +1,17 @@
-#include <iostream>
-
-namespace myNamespace {
-    void increment(int& i) {
-        i++;
-    }
-
-    void myFunc() {
-        int xyz;
-        bool myBool = true;
-        std::string myString;
-
-        std::cout << "Enter name: ";
-        std::cin >> myString;
-
-        std::cout << "Enter xyz: ";
-        std::cin >> xyz;
-
-        increment(xyz);
-
-        std::cout << "Hello " << std::endl << myString << "; " << xyz << " world!\n";
-    }
-}
-
-namespace myOtherNamespace {
-    void myFunc() {
-        std::cout << "Bye world!" << std::endl;
-    }
-}
-
-//using namespace myNamespace;
-//using namespace myOtherNamespace;
+#include "Shape.h"
 
 int main() {
-    myNamespace::myFunc();
-    myOtherNamespace::myFunc();
+    Shape myShape(10, 93);
+    Shape mySecondShape(30, 32);
+    Shape myThirdShape(32, 3);
+
+    Shape myCopiedShape = myShape;
+    myCopiedShape.setPosition(2, 3);
+
+    myShape.print();
+    mySecondShape.print();
+    myThirdShape.print();
+    myCopiedShape.print();
 
     return 0;
 }
