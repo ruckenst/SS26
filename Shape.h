@@ -1,6 +1,8 @@
 #ifndef SS26_SHAPE_H
 #define SS26_SHAPE_H
 
+#include <string>
+
 class Shape {
 public:
     Shape();

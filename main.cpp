@@ -1,17 +1,14 @@
 #include "Shape.h"
+#include "ShapeManager.h"
 
 int main() {
-    Shape myShape(10, 93);
-    Shape mySecondShape(30, 32);
-    Shape myThirdShape(32, 3);
+    ShapeManager shapeManager(10);
 
-    Shape myCopiedShape = myShape;
-    myCopiedShape.setPosition(2, 3);
+    shapeManager.addShape(Shape(12, 32));
+    shapeManager.addShape(Shape(43, 12));
+    shapeManager.addShape(Shape(3, 4));
 
-    myShape.print();
-    mySecondShape.print();
-    myThirdShape.print();
-    myCopiedShape.print();
+    shapeManager.printShapes();
 
     return 0;
 }
