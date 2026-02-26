@@ -12,8 +12,9 @@ public:
     ShapeManager(const ShapeManager& other);
     ShapeManager(ShapeManager&& other);
 
-    // ShapeManager copied = existing;
+    // copied = existing;
     ShapeManager& operator=(const ShapeManager& other);
+    ShapeManager& operator=(ShapeManager&& other);
 
     void addShape(const Shape shape);
     void printShapes() const;

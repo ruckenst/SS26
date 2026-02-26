@@ -1,4 +1,5 @@
 #include "ShapeManager.h"
+#include <iostream>
 
 ShapeManager::ShapeManager(int length) {
     maxLength = length;
@@ -12,6 +13,7 @@ ShapeManager::~ShapeManager() {
 }
 
 ShapeManager::ShapeManager(const ShapeManager &other) {
+    std::cout << "COPY CONSTRUCTOR" << std::endl;
     maxLength = other.maxLength;
     currentLength = other.currentLength;
 
@@ -22,6 +24,7 @@ ShapeManager::ShapeManager(const ShapeManager &other) {
 }
 
 ShapeManager::ShapeManager(ShapeManager &&other) {
+    std::cout << "MOVE CONSTRUCTOR" << std::endl;
     maxLength = other.maxLength;
     currentLength = other.currentLength;
     shapes = other.shapes;
@@ -31,7 +34,29 @@ ShapeManager::ShapeManager(ShapeManager &&other) {
     other.shapes = nullptr;
 }
 
+ShapeManager& ShapeManager::operator=(ShapeManager &&other) {
+    std::cout << "MOVE ASSIGNMENT OPERATOR" << std::endl;
+
+    if(this == &other) {
+        std::cout << "Tried to move itself!" << std::endl;
+        return *this;
+    }
+
+    delete[] shapes;
+
+    maxLength = other.maxLength;
+    currentLength = other.currentLength;
+    shapes = other.shapes;
+
+    other.maxLength = 0;
+    other.currentLength = 0;
+    other.shapes = nullptr;
+
+    return *this;
+}
+
 ShapeManager& ShapeManager::operator=(const ShapeManager &other) {
+    std::cout << "COPY ASSIGNMENT OPERATOR" << std::endl;
     if(this == &other) {
         return *this;
     }
