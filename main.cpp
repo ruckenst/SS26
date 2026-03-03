@@ -1,46 +1,29 @@
 #include "Shape.h"
 #include "ShapeManager.h"
+#include "Circle.h"
+#include "Triangle.h"
+#include "Rectangle.h"
 #include <iostream>
 
 int main() {
-    ShapeManager shapeManager(10);
+    Shape *shapes[5] = {nullptr};
 
-    shapeManager.addShape(Shape(4, 2));
-    shapeManager.addShape(Shape(6, 2));
-    shapeManager.addShape(Shape(32, 4));
+    shapes[0] = new Circle({2, 6}, 10);
+    shapes[1] = new Triangle({5, 2}, {1, 5}, {6, 4});
+    shapes[2] = new Rectangle({3, 5}, {1, 9});
 
-    shapeManager.printShapes();
+    for (int i = 0; i < 5; i++) {
+        if (shapes[i] == nullptr) continue;
 
-    ShapeManager copy(shapeManager);
-    copy.addShape(Shape(4, 5));
+        shapes[i]->print();
+    }
 
-    std::cout << std::endl;
-    copy.printShapes();
+    for (int i = 0; i < 5; i++) {
+        if (shapes[i] == nullptr) continue;
 
-    std::cout << std::endl;
-    shapeManager.printShapes();
-
-    copy = shapeManager;
-    std::cout << std::endl;
-    copy.printShapes();
-
-    ShapeManager otherCopy = copy;
-    std::cout << std::endl;
-    otherCopy.printShapes();
-
-    ShapeManager movedObject = std::move(otherCopy);
-
-    std::cout << std::endl;
-    movedObject.printShapes();
-
-    std::cout << "HERE IS OTHER COPY: " <<  std::endl;
-    otherCopy.printShapes();
-
-    movedObject = std::move(movedObject);
-
-    std::cout << "HERE IS MOVED OBJECT: " <<  std::endl;
-    std::cout << std::endl;
-    movedObject.printShapes();
+        delete shapes[i];
+        shapes[i] = nullptr;
+    }
 
     return 0;
 }
