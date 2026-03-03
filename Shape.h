@@ -2,24 +2,25 @@
 #define SS26_SHAPE_H
 
 #include <string>
+#include "Coordinate.h"
 
 class Shape {
 public:
     Shape();
-    Shape(int x, int y);
+    Shape(Coordinate position);
+    virtual ~Shape() = default;
 
-    void print() const;
+    virtual void print() const = 0;
 
-    int getX() const;
+    Coordinate getPosition() const;
     int getY() const;
 
     void setX(int newX);
     void setY(int newY);
-    void setPosition(int newX, int newY);
+    void setPosition(Coordinate position);
 
-private:
-    int x;
-    int y;
+protected:
+    Coordinate position;
 };
 
 #endif //SS26_SHAPE_H

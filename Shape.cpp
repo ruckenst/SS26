@@ -2,21 +2,15 @@
 #include <iostream>
 
 Shape::Shape() {
-    x = 0;
-    y = 0;
+    position = {0, 0};
 }
 
-Shape::Shape(int x, int y) {
-    this->x = x;
-    this->y = y;
+Shape::Shape(Coordinate position) {
+    setPosition(position);
 }
 
-int Shape::getX() const {
-    return x;
-}
-
-int Shape::getY() const {
-    return y;
+Coordinate Shape::getPosition() const {
+    return position;
 }
 
 void Shape::setX(int newX) {
@@ -25,7 +19,7 @@ void Shape::setX(int newX) {
         return;
     }
 
-    x = newX;
+    position.x = newX;
 }
 
 void Shape::setY(int newY) {
@@ -34,15 +28,10 @@ void Shape::setY(int newY) {
         return;
     }
 
-    y = newY;
+    position.y = newY;
 }
 
-void Shape::setPosition(int newX, int newY) {
-    setX(newX);
-    setY(newY);
-}
-
-void Shape::print() const {
-    // x: %d; y: %d
-    std::cout << "x: " << x << "; y: " << y << std::endl;
+void Shape::setPosition(Coordinate position) {
+    setX(position.x);
+    setY(position.y);
 }

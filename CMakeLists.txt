@@ -6,5 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(SS26
         main.cpp
         Shape.cpp
-        ShapeManager.cpp
+        Circle.cpp
+        Triangle.cpp
+        Triangle.h
+        Rectangle.cpp
+        Rectangle.h
+        Coordinate.h
 )

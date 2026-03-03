@@ -1,48 +1,28 @@
 #include "Shape.h"
 #include "ShapeManager.h"
 #include <iostream>
-
-ShapeManager someFunction(int size) {
-    ShapeManager myTempShapeManager(size);
-    myTempShapeManager.addShape(Shape(1, 1));
-
-    return myTempShapeManager;
-}
+#include "Circle.h"
+#include "Triangle.h"
+#include "Rectangle.h"
 
 int main() {
-    ShapeManager shapeManager(10);
+    Shape *myShapes[5] = {nullptr};
 
-    shapeManager.addShape(Shape(12, 32));
-    shapeManager.addShape(Shape(43, 12));
-    shapeManager.addShape(Shape(3, 4));
+    myShapes[0] = new Circle({2, 4}, 12);
+    myShapes[1] = new Triangle({2, 4}, {8, 4}, {9, 5});
+    myShapes[2] = new Rectangle({4, 2}, {9, 5});
 
-    std::cout << std::endl;
-    shapeManager.printShapes();
+    for (int i = 0; i < 5; i++) {
+        if (myShapes[i] == nullptr) continue;
 
-    ShapeManager copiedShapeManager(shapeManager);
-    //ShapeManager copiedShapeManager = shapeManager;
+        myShapes[i]->print();
+    }
 
-    std::cout << std::endl;
-    copiedShapeManager.printShapes();
+    for (int i = 0; i < 5; i++) {
+        if (myShapes[i] == nullptr) continue;
 
-    shapeManager.addShape(Shape(84, 23));
-
-    std::cout << std::endl;
-    shapeManager.printShapes();
-
-    std::cout << std::endl;
-    copiedShapeManager.printShapes();
-
-    //ShapeManager movedShapeManger = std::move(copiedShapeManager); // MOVE CONSTRUCTOR
-    copiedShapeManager = std::move(copiedShapeManager); // MOVE ASSIGNMENT OPERATOR
-
-    /*
-    std::cout << std::endl;
-    movedShapeManger.printShapes();
-    */
-
-    std::cout << "HERE COMES COPIED: " << std::endl;
-    copiedShapeManager.printShapes();
+        delete myShapes[i];
+    }
 
     return 0;
 }
