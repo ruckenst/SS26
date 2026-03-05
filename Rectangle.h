@@ -6,12 +6,14 @@
 
 class Rectangle : public Shape {
 public:
-    Rectangle(Coordinate position, Coordinate oppositePosition);
+    Rectangle(Coordinate position, Coordinate oppositeSidePosition, Color color);
 
     void print() const override;
+    Rectangle* clone() const override;
 
 private:
-    Coordinate oppositePosition;
+    Coordinate oppositeSidePosition;
 };
+
 
 #endif //SS26_RECTANGLE_H

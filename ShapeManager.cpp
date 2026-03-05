@@ -1,90 +1,103 @@
 #include "ShapeManager.h"
 #include <iostream>
 
-ShapeManager::ShapeManager(int length) {
-    maxLength = length;
-    currentLength = 0;
+ShapeManager::ShapeManager(int size) {
+    maxSize = size;
+    currentCount = 0;
 
-    shapes = new Shape[length];
+    shapes = new Shape*[size];
 }
 
 ShapeManager::~ShapeManager() {
-    delete[] shapes;
+    freeShapes();
 }
 
-ShapeManager::ShapeManager(const ShapeManager &other) {
-    std::cout << "COPY CONSTRUCTOR" << std::endl;
-    maxLength = other.maxLength;
-    currentLength = other.currentLength;
+ShapeManager::ShapeManager(const ShapeManager& other) {
+    maxSize = other.maxSize;
+    currentCount = other.currentCount;
 
-    shapes = new Shape[maxLength];
-    for(int i = 0; i < other.currentLength; i++) {
-        shapes[i] = other.shapes[i];
+    shapes = new Shape*[maxSize];
+    for(int i = 0; i < other.currentCount; i++) {
+        shapes[i] = other.shapes[i]->clone();
     }
 }
 
-ShapeManager::ShapeManager(ShapeManager &&other) {
-    std::cout << "MOVE CONSTRUCTOR" << std::endl;
-    maxLength = other.maxLength;
-    currentLength = other.currentLength;
+ShapeManager::ShapeManager(ShapeManager&& other) {
+    std::cout << "MOVE CONSTRUCTOR!" << std::endl;
+
+    maxSize = other.maxSize;
+    currentCount = other.currentCount;
     shapes = other.shapes;
 
-    other.maxLength = 0;
-    other.currentLength = 0;
+    other.maxSize = 0;
+    other.currentCount = 0;
     other.shapes = nullptr;
 }
 
-ShapeManager& ShapeManager::operator=(ShapeManager &&other) {
-    std::cout << "MOVE ASSIGNMENT OPERATOR" << std::endl;
-
-    if(this == &other) {
-        std::cout << "Tried to move itself!" << std::endl;
-        return *this;
-    }
-
-    delete[] shapes;
-
-    maxLength = other.maxLength;
-    currentLength = other.currentLength;
-    shapes = other.shapes;
-
-    other.maxLength = 0;
-    other.currentLength = 0;
-    other.shapes = nullptr;
-
-    return *this;
-}
-
-ShapeManager& ShapeManager::operator=(const ShapeManager &other) {
-    std::cout << "COPY ASSIGNMENT OPERATOR" << std::endl;
-    if(this == &other) {
-        return *this;
-    }
-
-    delete[] shapes;
-    currentLength = other.currentLength;
-    maxLength = other.maxLength;
-
-    shapes = new Shape[maxLength];
-    for(int i = 0; i < other.currentLength; i++) {
-        shapes[i] = other.shapes[i];
-    }
-
-    return *this;
-}
-
-void ShapeManager::addShape(const Shape shape) {
-    if(currentLength >= maxLength) {
-        // Already full
+void ShapeManager::addShape(Shape* shape) {
+    if(currentCount == maxSize) {
+        std::cerr << "ShapeManager is full! Shape was not added.\n";
+        delete shape;
         return;
     }
 
-    shapes[currentLength] = shape;
-    currentLength++;
+    shapes[currentCount] = shape;
+    currentCount++;
 }
 
 void ShapeManager::printShapes() const {
-    for(int i = 0; i < currentLength; i++) {
-        shapes[i].print();
+    for(int i = 0; i < currentCount; i++) {
+        shapes[i]->print();
     }
+}
+
+ShapeManager &ShapeManager::operator=(ShapeManager &&other) {
+    std::cout << "MOVE ASSIGMENT OPERATOR" << std::endl;
+
+    if(this == &other) {
+        std::cerr << "Tried to move itself!" << std::endl;
+        return *this;
+    }
+
+    freeShapes();
+
+    maxSize = other.maxSize;
+    currentCount = other.currentCount;
+    shapes = other.shapes;
+
+    other.maxSize = 0;
+    other.currentCount = 0;
+    other.shapes = nullptr;
+
+    return *this;
+}
+
+ShapeManager &ShapeManager::operator=(const ShapeManager &other) {
+    if(this == &other) {
+        std::cerr << "Tried to copy itself!" << std::endl;
+        return *this;
+    }
+
+    freeShapes();
+
+    maxSize = other.maxSize;
+    currentCount = other.currentCount;
+
+    shapes = new Shape*[maxSize];
+    for(int i = 0; i < other.currentCount; i++) {
+        shapes[i] = other.shapes[i]->clone();
+    }
+
+    return *this;
+}
+
+void ShapeManager::freeShapes() {
+    for(int i = 0; i < currentCount; i++) {
+        delete shapes[i];
+        shapes[i] = nullptr;
+    }
+
+    delete[] shapes;
+    shapes = nullptr;
+    currentCount = 0;
 }

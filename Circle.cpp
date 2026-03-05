@@ -1,12 +1,12 @@
 #include "Circle.h"
 #include <iostream>
 
-Circle::Circle(Coordinate position, int radius) : Shape(position) {
-    setRadius(radius);
+Circle::Circle(Coordinate position, int radius, Color color) : Shape(position, color) {
+    this->radius = radius;
 }
 
 Circle::~Circle(){
-    std::cout << "Deleted Circle!" << std::endl;
+    std::cout << "Deleting Circle" << std::endl;
 }
 
 int Circle::getRadius() const {
@@ -15,7 +15,7 @@ int Circle::getRadius() const {
 
 void Circle::setRadius(int newRadius) {
     if(newRadius <= 0) {
-        std::cerr << "The radius must be bigger than 0!" << std::endl;
+        std::cerr << "Radius must be bigger than 0!" << std::endl;
         return;
     }
 
@@ -23,6 +23,11 @@ void Circle::setRadius(int newRadius) {
 }
 
 void Circle::print() const {
-    // x: %d; y: %d; radius: %d
+    std::cout << getColorCode(color);
     std::cout << "x: " << position.x << "; y: " << position.y << "; radius: " << radius << std::endl;
+    std::cout << RESET;
+}
+
+Circle* Circle::clone() const {
+    return new Circle(*this);
 }

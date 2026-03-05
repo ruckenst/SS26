@@ -5,24 +5,24 @@
 
 class ShapeManager {
 public:
-    ShapeManager(int length);
+    ShapeManager(int size);
     ~ShapeManager();
 
-    // ShapeManager copied(existing);
     ShapeManager(const ShapeManager& other);
     ShapeManager(ShapeManager&& other);
 
-    // copied = existing;
     ShapeManager& operator=(const ShapeManager& other);
     ShapeManager& operator=(ShapeManager&& other);
 
-    void addShape(const Shape shape);
+    void addShape(Shape* shape);
     void printShapes() const;
 
 private:
-    Shape* shapes;
-    int maxLength;
-    int currentLength;
+    Shape** shapes;
+    int maxSize;
+    int currentCount;
+
+    void freeShapes();
 };
 
 

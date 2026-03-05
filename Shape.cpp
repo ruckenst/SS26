@@ -1,11 +1,12 @@
 #include "Shape.h"
 #include <iostream>
 
-Shape::Shape() : Shape({0, 0}) {
+Shape::Shape() : Shape({0, 0}, Red) {
 }
 
-Shape::Shape(Coordinate position) {
+Shape::Shape(Coordinate position, Color color) {
     setPosition(position);
+    this->color = color;
 }
 
 Coordinate Shape::getPosition() const {
@@ -30,7 +31,7 @@ void Shape::setY(int newY) {
     position.y = newY;
 }
 
-void Shape::setPosition(Coordinate newPosition) {
-    setX(newPosition.x);
-    setY(newPosition.y);
+void Shape::setPosition(Coordinate position) {
+    setX(position.x);
+    setY(position.y);
 }
