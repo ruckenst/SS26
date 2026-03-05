@@ -1,7 +1,7 @@
 #include "Circle.h"
 #include <iostream>
 
-Circle::Circle(Coordinate position, int radius) : Shape(position) {
+Circle::Circle(Coordinate position, int radius, Color color) : Shape(position, color) {
     this->radius = radius;
 }
 
@@ -23,6 +23,11 @@ void Circle::setRadius(int newRadius) {
 }
 
 void Circle::print() const {
-    // x: %d; y: %d, radius: %d
+    std::cout << getColorCode(color);
     std::cout << "x: " << position.x << "; y: " << position.y << "; radius: " << radius << std::endl;
+    std::cout << RESET;
+}
+
+Circle* Circle::clone() const {
+    return new Circle(*this);
 }

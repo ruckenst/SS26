@@ -6,9 +6,10 @@
 
 class Rectangle : public Shape {
 public:
-    Rectangle(Coordinate position, Coordinate oppositeSidePosition);
+    Rectangle(Coordinate position, Coordinate oppositeSidePosition, Color color);
 
     void print() const override;
+    Rectangle* clone() const override;
 
 private:
     Coordinate oppositeSidePosition;

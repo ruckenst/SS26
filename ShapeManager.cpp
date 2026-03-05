@@ -5,20 +5,20 @@ ShapeManager::ShapeManager(int size) {
     maxSize = size;
     currentCount = 0;
 
-    shapes = new Shape[size];
+    shapes = new Shape*[size];
 }
 
 ShapeManager::~ShapeManager() {
-    delete[] shapes;
+    freeShapes();
 }
 
 ShapeManager::ShapeManager(const ShapeManager& other) {
     maxSize = other.maxSize;
     currentCount = other.currentCount;
 
-    shapes = new Shape[maxSize];
+    shapes = new Shape*[maxSize];
     for(int i = 0; i < other.currentCount; i++) {
-        shapes[i] = other.shapes[i];
+        shapes[i] = other.shapes[i]->clone();
     }
 }
 
@@ -34,9 +34,10 @@ ShapeManager::ShapeManager(ShapeManager&& other) {
     other.shapes = nullptr;
 }
 
-void ShapeManager::addShape(Shape shape) {
+void ShapeManager::addShape(Shape* shape) {
     if(currentCount == maxSize) {
-        // Array full
+        std::cerr << "ShapeManager is full! Shape was not added.\n";
+        delete shape;
         return;
     }
 
@@ -46,7 +47,7 @@ void ShapeManager::addShape(Shape shape) {
 
 void ShapeManager::printShapes() const {
     for(int i = 0; i < currentCount; i++) {
-        shapes[i].print();
+        shapes[i]->print();
     }
 }
 
@@ -58,7 +59,7 @@ ShapeManager &ShapeManager::operator=(ShapeManager &&other) {
         return *this;
     }
 
-    delete[] shapes;
+    freeShapes();
 
     maxSize = other.maxSize;
     currentCount = other.currentCount;
@@ -77,15 +78,26 @@ ShapeManager &ShapeManager::operator=(const ShapeManager &other) {
         return *this;
     }
 
-    delete[] shapes;
+    freeShapes();
 
     maxSize = other.maxSize;
     currentCount = other.currentCount;
 
-    shapes = new Shape[maxSize];
+    shapes = new Shape*[maxSize];
     for(int i = 0; i < other.currentCount; i++) {
-        shapes[i] = other.shapes[i];
+        shapes[i] = other.shapes[i]->clone();
     }
 
     return *this;
+}
+
+void ShapeManager::freeShapes() {
+    for(int i = 0; i < currentCount; i++) {
+        delete shapes[i];
+        shapes[i] = nullptr;
+    }
+
+    delete[] shapes;
+    shapes = nullptr;
+    currentCount = 0;
 }

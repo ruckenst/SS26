@@ -14,16 +14,15 @@ public:
     ShapeManager& operator=(const ShapeManager& other);
     ShapeManager& operator=(ShapeManager&& other);
 
-    //ShapeManager(Shape* shapes);
-
-    void addShape(Shape shape);
-    //void deleteShape(int index);
+    void addShape(Shape* shape);
     void printShapes() const;
 
 private:
-    Shape* shapes;
+    Shape** shapes;
     int maxSize;
     int currentCount;
+
+    void freeShapes();
 };
 
 

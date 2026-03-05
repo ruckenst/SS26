@@ -6,9 +6,13 @@
 
 class Triangle : public Shape {
 public:
-    Triangle(Coordinate cornerAPosition, Coordinate cornerBPosition, Coordinate cornerCPosition);
+    Triangle(Coordinate cornerAPosition,
+             Coordinate cornerBPosition,
+             Coordinate cornerCPosition,
+             Color color);
 
     void print() const override;
+    Triangle* clone() const override;
 
 private:
     Coordinate cornerBPosition;
