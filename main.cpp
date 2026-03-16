@@ -1,54 +1,26 @@
 #include <iostream>
-#include "Board.h"
+#include "MyStaticClass.h"
+#include "WorldGenerator.h"
+#include "MersenneTwisterRandomNumberGenerator.h"
+#include "FixedRandomNumberGenerator.h"
 
 int main() {
-    Board myBoard;
+    MyStaticClass someClassA(1);
+    MyStaticClass someClassB(2);
+    MyStaticClass someClassC(3);
 
-    while(!myBoard.isComplete()) {
-        //system("CLS"); <- Windows
-        system("CLEAR"); // <- Linux/...
-        myBoard.print();
+    someClassA.print();
+    someClassB.print();
+    someClassC.print();
 
-        char input;
-        std::cout << "Input: ";
-        std::cin >> input;
+    std::cout << MyStaticClass::getObjectCount() << std::endl;
 
-        switch(input) {
-            case 'W':
-            case 'w':
-                myBoard.moveUp();
-                break;
-            case 'A':
-            case 'a':
-                myBoard.moveLeft();
-                break;
-            case 'S':
-            case 's':
-                myBoard.moveDown();
-                break;
-            case 'D':
-            case 'd':
-                myBoard.moveRight();
-                break;
-            case 'F':
-            case 'f':
-                myBoard.accept();
-                break;
-            default:
-                std::cout << "Unknown input!" << std::endl;
-        }
-    }
+    //IRandomNumberGenerator* rng = new MersenneTwisterRandomNumberGenerator();
+    IRandomNumberGenerator* rng = new FixedRandomNumberGenerator();
 
-    //system("CLS"); <- Windows
-    system("CLEAR"); // <- Linux/...
-    myBoard.print();
+    WorldGenerator myWorld(rng);
 
-    int winner = myBoard.getWinner();
-    if(winner == 0) {
-        std::cout << "No winner could be determined" << std::endl;
-    } else {
-        std::cout << "Player " << winner << " has won!" << std::endl;
-    }
+    delete rng;
 
     return 0;
 }
