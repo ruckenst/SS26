@@ -1,26 +1,30 @@
 #include <iostream>
-#include "MyStaticClass.h"
-#include "WorldGenerator.h"
-#include "MersenneTwisterRandomNumberGenerator.h"
-#include "FixedRandomNumberGenerator.h"
+#include "FeeStrategy.h"
+#include "FeeStrategyFactory.h"
+#include "PaymentStartedHandler.h"
+#include "PaymentProcessingHandler.h"
+#include "PaymentFinishedHandler.h"
+
+void pay(FeeStrategy* strategy, float amount) {
+    float fee = strategy->calculateFee(amount);
+
+    std::cout << "Paid:  " << amount << std::endl;
+    std::cout << "Fee:   " << fee << std::endl;
+    std::cout << "Total: " << amount + fee << std::endl;
+}
 
 int main() {
-    MyStaticClass someClassA(1);
-    MyStaticClass someClassB(2);
-    MyStaticClass someClassC(3);
+    //pay(FeeStrategyFactory::getStrategy(PayPal), 10.50);
 
-    someClassA.print();
-    someClassB.print();
-    someClassC.print();
+    PaymentStartedHandler paymentStartedHandler;
+    PaymentProcessingHandler paymentProcessingHandler;
+    PaymentFinishedHandler paymentFinishedHandler;
 
-    std::cout << MyStaticClass::getObjectCount() << std::endl;
+    paymentStartedHandler.setNext(&paymentProcessingHandler);
+    paymentProcessingHandler.setNext(&paymentFinishedHandler);
 
-    //IRandomNumberGenerator* rng = new MersenneTwisterRandomNumberGenerator();
-    IRandomNumberGenerator* rng = new FixedRandomNumberGenerator();
-
-    WorldGenerator myWorld(rng);
-
-    delete rng;
+    PaymentRequest request(PayPal, 20.00);
+    paymentStartedHandler.handle(request);
 
     return 0;
 }
