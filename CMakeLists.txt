@@ -5,8 +5,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(SS26
         main.cpp
-        Board.cpp
-        Board.h
-        Tile.h
-        Coordinate.h
+        WorldGenerator.cpp
+        WorldGenerator.h
+        MyClass.cpp
+        MyClass.h
+        RandomNumberGenerator.h
+        MersenneTwister.cpp
+        MersenneTwister.h
+        FixedNumberGenerator.cpp
+        FixedNumberGenerator.h
 )
