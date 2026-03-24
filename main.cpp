@@ -1,52 +1,35 @@
+#include "Ability.h"
+#include "BuffAbility.h"
+#include "DamageAbility.h"
+#include "HealAbility.h"
+
 #include <iostream>
-#include "FeeStrategy.h"
-#include "FeeStrategyFactory.h"
-#include "PaymentRequest.h"
-#include "PaymentHandler.h"
-#include "PaymentStartedHandler.h"
-#include "PaymentProcessingHandler.h"
-#include "PaymentFinishedHandler.h"
-
-void pay(FeeStrategy* strategy, float amount) {
-    float fee = strategy->calculateFee(amount);
-
-    /*
-    switch(provider) {
-        case Transfer:
-            fee = 0;
-            break;
-        case PayPal:
-            fee = amount * 0.03;
-            break;
-        case MasterCard:
-            fee = amount * 0.015 + 0.1;
-            break;
-        default:
-            std::cout << "Unknown provider!" << std::endl;
-            return;
-    }
-     */
-
-    std::cout << "=====================" << std::endl;
-    std::cout << "Payment complete!" << std::endl;
-    std::cout << "Amount: " << amount << std::endl;
-    std::cout << "Fee:    " << fee << std::endl;
-    std::cout << "Total:  " << amount + fee << std::endl;
-    std::cout << "=====================" << std::endl;
-}
 
 int main() {
+    int a = 10;
+    int b = 3;
 
-    PaymentRequest myPaymentRequest(PayPal, 20.00);
+    std::cout << (double)a / b << std::endl;
 
-    PaymentStartedHandler* paymentStartedHandler = new PaymentStartedHandler();
-    PaymentProcessingHandler* paymentProcessingHandler = new PaymentProcessingHandler();
-    PaymentFinishedHandler* paymentFinishedHandler = new PaymentFinishedHandler();
+    // (...) - C Syntax - VERMEIDEN
+    // dynamic_cast
+    // static_cast
+    // reinterpret_cast - VERMEIDEN
 
-    paymentStartedHandler->setNext(paymentProcessingHandler);
-    paymentProcessingHandler->setNext(paymentFinishedHandler);
+    Ability* abilities[3];
 
-    paymentStartedHandler->handle(myPaymentRequest);
+    abilities[0] = new BuffAbility();
+    abilities[1] = new DamageAbility();
+    abilities[2] = new HealAbility();
+
+    for(auto& ability : abilities) {
+        ability->action();
+    }
+
+    for(auto& ability : abilities) {
+        delete ability;
+        ability = nullptr;
+    }
 
     return 0;
 }
