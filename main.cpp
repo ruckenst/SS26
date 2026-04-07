@@ -1,30 +1,24 @@
 #include <iostream>
-#include "FeeStrategy.h"
-#include "FeeStrategyFactory.h"
-#include "PaymentStartedHandler.h"
-#include "PaymentProcessingHandler.h"
-#include "PaymentFinishedHandler.h"
+#include <array>
+#include <vector>
+#include "LinkedList.h"
 
-void pay(FeeStrategy* strategy, float amount) {
-    float fee = strategy->calculateFee(amount);
-
-    std::cout << "Paid:  " << amount << std::endl;
-    std::cout << "Fee:   " << fee << std::endl;
-    std::cout << "Total: " << amount + fee << std::endl;
+template <typename T>
+void printSomething(T something){
+    std::cout << "Something: " << something << std::endl;
 }
 
 int main() {
-    //pay(FeeStrategyFactory::getStrategy(PayPal), 10.50);
+    LinkedList<int> myList;
 
-    PaymentStartedHandler paymentStartedHandler;
-    PaymentProcessingHandler paymentProcessingHandler;
-    PaymentFinishedHandler paymentFinishedHandler;
+    myList.insertBack(10);
+    myList.print();
 
-    paymentStartedHandler.setNext(&paymentProcessingHandler);
-    paymentProcessingHandler.setNext(&paymentFinishedHandler);
+    double myVar = 123;
 
-    PaymentRequest request(PayPal, 20.00);
-    paymentStartedHandler.handle(request);
-
+    printSomething(myVar);
+    printSomething<double>(123);
+    printSomething(123.567);
+    printSomething("Something");
     return 0;
 }
