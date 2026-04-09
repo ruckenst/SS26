@@ -1,29 +1,30 @@
 #include <iostream>
-#include <array>
-#include <vector>
-#include "LinkedList.h"
 
-template <typename T>
-void printSomething(T something){
-    std::cout << "Something: " << something << std::endl;
-}
+#include "Customer.h"
+#include "Checkout.h"
 
 int main() {
-    LinkedList<int> myList;
+    Checkout checkout;
 
-    myList.insertBack(10);
-    myList.insertBack(35);
-    myList.insertBack(12);
+    Customer myCustomer;
+    myCustomer.addItem("Zwiebel");
+    myCustomer.addItem("Tomate");
+    myCustomer.addItem("Orangensaft");
+    myCustomer.addItem("Cola");
 
-    myList.print([](int element) {
-        std::cout << "A: " << element;
-    });
+    checkout.enqueueCustomer(myCustomer);
+    checkout.enqueueCustomer(myCustomer);
+    checkout.enqueueCustomer(myCustomer);
+    checkout.enqueueCustomer(myCustomer);
+    checkout.enqueueCustomer(myCustomer);
 
-    double myVar = 123;
+    checkout.print();
 
-    printSomething(myVar);
-    printSomething<double>(123);
-    printSomething(123.567);
-    printSomething("Something");
+    checkout.processCustomer();
+
+    checkout.print();
+
+    checkout.processCustomer();
+
     return 0;
 }
