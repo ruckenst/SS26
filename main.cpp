@@ -12,7 +12,12 @@ int main() {
     LinkedList<int> myList;
 
     myList.insertBack(10);
-    myList.print();
+    myList.insertBack(35);
+    myList.insertBack(12);
+
+    myList.print([](int element) {
+        std::cout << "A: " << element;
+    });
 
     double myVar = 123;
 

@@ -7,7 +7,7 @@ template<typename T>
 class LinkedList {
 public:
     void insertBack(T newValue);
-    void print();
+    void print(void printElement(T element));
 
 private:
     struct Node {
@@ -36,11 +36,12 @@ void LinkedList<T>::insertBack(T newValue) {
 }
 
 template<typename T>
-void LinkedList<T>::print() {
+void LinkedList<T>::print(void printElement(T element)) {
     Node* curr = head;
 
     while (curr != nullptr) {
-        std::cout << curr->value << " -> ";
+        printElement(curr->value);
+        std::cout << " -> ";
         curr = curr->next;
     }
 
