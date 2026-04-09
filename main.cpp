@@ -1,47 +1,26 @@
 #include <iostream>
-#include <vector>
-#include "LinkedList.h"
-
-template<typename T>
-void doSomething(T something) {
-    std::cout << "Something: " << something << std::endl;
-}
-
-template<typename T>
-void doSomethingWithVector(std::vector<T>& vector) {
-    for(auto& element : vector) {
-        std::cout << element << ", ";
-    }
-
-    std::cout << std::endl;
-}
+#include "Customer.h"
+#include "Checkout.h"
 
 int main() {
-    LinkedList<char> myList;
+    Checkout checkout;
+    Customer myCustomer;
 
-    myList.insertBack('a');
-    myList.insertBack('X');
-    myList.insertBack('3');
-    myList.print([](char c) {
-        std::cout << c;
-    });
+    myCustomer.insertItem("Tomaten");
+    myCustomer.insertItem("Zwiebel");
+    myCustomer.insertItem("Orangensaft");
+    myCustomer.insertItem("Cola");
 
-    myList.sort([](char left, char right) {
-        return left < right;
-    });
+    checkout.print();
 
-    std::vector<int> myIntegerVector = {1, 2, 3};
-    std::vector<char> myCharVector = {'a', 'b', 'c'};
+    checkout.enqueueCustomer(myCustomer);
 
-    doSomethingWithVector(myIntegerVector);
-    doSomethingWithVector(myCharVector);
+    checkout.print();
 
-    int myIntegers[3] = {1, 2, 3};
+    checkout.processCustomer();
+    checkout.processCustomer();
+    checkout.processCustomer();
+    checkout.processCustomer();
 
-    doSomething<char>(123);
-    doSomething<int>(123.567);
-    doSomething("Something");
-    doSomething<int>('X');
-    doSomething(myIntegers);
     return 0;
 }
