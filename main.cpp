@@ -1,35 +1,47 @@
-#include "Ability.h"
-#include "BuffAbility.h"
-#include "DamageAbility.h"
-#include "HealAbility.h"
-
 #include <iostream>
+#include <vector>
+#include "LinkedList.h"
+
+template<typename T>
+void doSomething(T something) {
+    std::cout << "Something: " << something << std::endl;
+}
+
+template<typename T>
+void doSomethingWithVector(std::vector<T>& vector) {
+    for(auto& element : vector) {
+        std::cout << element << ", ";
+    }
+
+    std::cout << std::endl;
+}
 
 int main() {
-    int a = 10;
-    int b = 3;
+    LinkedList<char> myList;
 
-    std::cout << (double)a / b << std::endl;
+    myList.insertBack('a');
+    myList.insertBack('X');
+    myList.insertBack('3');
+    myList.print([](char c) {
+        std::cout << c;
+    });
 
-    // (...) - C Syntax - VERMEIDEN
-    // dynamic_cast
-    // static_cast
-    // reinterpret_cast - VERMEIDEN
+    myList.sort([](char left, char right) {
+        return left < right;
+    });
 
-    Ability* abilities[3];
+    std::vector<int> myIntegerVector = {1, 2, 3};
+    std::vector<char> myCharVector = {'a', 'b', 'c'};
 
-    abilities[0] = new BuffAbility();
-    abilities[1] = new DamageAbility();
-    abilities[2] = new HealAbility();
+    doSomethingWithVector(myIntegerVector);
+    doSomethingWithVector(myCharVector);
 
-    for(auto& ability : abilities) {
-        ability->action();
-    }
+    int myIntegers[3] = {1, 2, 3};
 
-    for(auto& ability : abilities) {
-        delete ability;
-        ability = nullptr;
-    }
-
+    doSomething<char>(123);
+    doSomething<int>(123.567);
+    doSomething("Something");
+    doSomething<int>('X');
+    doSomething(myIntegers);
     return 0;
 }

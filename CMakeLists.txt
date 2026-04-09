@@ -5,11 +5,5 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(SS26
         main.cpp
-        Ability.h
-        DamageAbility.cpp
-        DamageAbility.h
-        HealAbility.cpp
-        HealAbility.h
-        BuffAbility.cpp
-        BuffAbility.h
+        LinkedList.h
 )
