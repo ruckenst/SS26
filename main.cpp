@@ -1,30 +1,20 @@
-#include <iostream>
-
-#include "Customer.h"
-#include "Checkout.h"
+#include "Chunk.h"
+#include "ConsoleChunkRenderer.h"
+#include "FlatChunkGenerator.h"
 
 int main() {
-    Checkout checkout;
+    Chunk myChunk;
 
-    Customer myCustomer;
-    myCustomer.addItem("Zwiebel");
-    myCustomer.addItem("Tomate");
-    myCustomer.addItem("Orangensaft");
-    myCustomer.addItem("Cola");
+    ChunkGenerator* myChunkGenerator = new FlatChunkGenerator();
+    myChunkGenerator->generate(myChunk);
 
-    checkout.enqueueCustomer(myCustomer);
-    checkout.enqueueCustomer(myCustomer);
-    checkout.enqueueCustomer(myCustomer);
-    checkout.enqueueCustomer(myCustomer);
-    checkout.enqueueCustomer(myCustomer);
+    delete myChunkGenerator;
 
-    checkout.print();
+    ChunkRenderer* myChunkRenderer = new ConsoleChunkRenderer();
 
-    checkout.processCustomer();
+    myChunkRenderer->render(myChunk);
 
-    checkout.print();
-
-    checkout.processCustomer();
+    delete myChunkRenderer;
 
     return 0;
 }
