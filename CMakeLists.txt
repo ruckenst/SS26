@@ -5,8 +5,13 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(SS26
         main.cpp
-        Customer.cpp
-        Customer.h
-        Checkout.cpp
-        Checkout.h
+        BlockType.h
+        Chunk.cpp
+        Chunk.h
+        ChunkRenderer.h
+        ConsoleChunkRenderer.cpp
+        ConsoleChunkRenderer.h
+        ChunkGenerator.h
+        FlatWorldChunkGenerator.cpp
+        FlatWorldChunkGenerator.h
 )
