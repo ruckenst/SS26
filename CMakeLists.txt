@@ -5,4 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(SS26
         main.cpp
+        Worker.cpp
+        Worker.h
+        ThreadPool.cpp
+        ThreadPool.h
 )
