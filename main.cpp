@@ -1,62 +1,72 @@
 #include <iostream>
 #include <mutex>
-#include "ThreadPool.h"
+#include <string>
+#include <thread>
+#include <vector>
 
-void work(bool& isCancelled) {
-    for(int i = 0; i < 100000000; i++) {
-        if(isCancelled){
-            std::cout << "Worker cancelled!" << std::endl;
-            break;
-        }
-
-        std::cout << "Printing: " << i << std::endl;
+void printSomething(bool comparisonFunction(int, int)) {
+    if(comparisonFunction(20, 83)) {
+        std::cout << "Text A" << std::endl;
+    } else {
+        std::cout << "Text B" << std::endl;
     }
 }
 
-int main() {
-    /*
-    bool isCancelled;
-    std::thread th1 = std::thread(work, std::ref(isCancelled));
-    std::thread th2 = std::thread(work, std::ref(isCancelled));
-    std::thread th3 = std::thread(work, std::ref(isCancelled));
+bool testFunction(int a, int b) {
+    return a > b;
+}
 
-    for(int i = 0; i < 1000; i++) {
-        std::cout << "PRINTING: " << i << std::endl;
-    }
+struct File {
+    std::string name;
+    int size;
+};
 
-    isCancelled = true;
-    th1.join();
-    th2.join();
-    th3.join();
-     */
+void downloadFile(File file, std::mutex& mutex) {
+    int currentSize = 0;
 
-    const int numberOfElements = 1000000000;
-    const int numberOfThreads = 8;
-    int numberOfElementsPerThread = numberOfElements / numberOfThreads;
-    int remainingElements = numberOfElements % numberOfThreads;
+    while(currentSize < file.size) {
+        if(currentSize % 10000 == 0) {
+            double currentPercentage = currentSize / (double)file.size * 100;
 
-    ThreadPool threadPool(2);
-
-    auto start = std::chrono::steady_clock::now();
-
-    for(int i = 0; i < numberOfThreads; i++) {
-        int startValue = i * numberOfElementsPerThread;
-        int endValue = (i + 1) * numberOfElementsPerThread;
-
-        if(i + 1 == numberOfThreads){
-            endValue += remainingElements;
+            std::lock_guard<std::mutex> guard(mutex);
+            std::cout << "File '" << file.name << "' (" << currentPercentage << "/100)" << std::endl;
         }
 
-        threadPool.startFuture(startValue, endValue);
+        currentSize++;
     }
 
-    int result = threadPool.awaitFuture();
+    std::lock_guard<std::mutex> guard(mutex);
+    std::cout << "### File '" << file.name << "' Finished!" << std::endl;
+}
 
-    auto end = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+int main() {
+    printSomething(testFunction);
+    printSomething([](int a, int b) {
+        return a < b;
+    });
 
-    std::cout << "Result: " << result << std::endl;
-    std::cout << "Processing took: " << duration << "ms" << std::endl;
+    std::vector<File> files = {
+            File("File_A.pdf", 892374),
+            File("File_B.pdf", 5231),
+            File("File_C.pdf", 962),
+            File("File_D.pdf", 5682352),
+            File("File_E.pdf", 28235),
+            File("File_F.pdf", 28346),
+            File("File_G.pdf", 6827)
+    };
+
+    std::vector<std::thread> threads;
+    std::mutex mutex;
+
+    for(const auto& file : files) {
+        threads.push_back(std::thread(downloadFile, file, std::ref(mutex)));
+    }
+
+    for(auto& thread : threads) {
+        thread.join();
+    }
+
+    std::cout << "All files downloaded successfully!" << std::endl;
 
     return 0;
 }
