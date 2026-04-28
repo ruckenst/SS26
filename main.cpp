@@ -1,67 +1,58 @@
 #include <iostream>
 #include <mutex>
-#include "ThreadPool.h"
-#include "Worker.h"
 #include <thread>
+#include <string>
+#include <vector>
 
-void printTonsOfText(bool& isCancelled){
-    for(int i = 0; i < 1000000000; i++) {
-        if(isCancelled) {
-            std::cout << "WORKER CANCELLED!" << std::endl;
-            break;
+struct File {
+    std::string name;
+    int size;
+};
+
+void downloadFile(File file, std::mutex& mutex){
+    int currentCount = 0;
+    int previousPercentage = 0;
+
+    while(currentCount < file.size) {
+        int currentPercentage = currentCount / (double)file.size * 100;
+
+        if(currentPercentage != previousPercentage) {
+            std::lock_guard<std::mutex> guard(mutex);
+            std::cout << "File: '" << file.name << "' (" << currentPercentage << "/100)" << std::endl;
+            previousPercentage = currentPercentage;
         }
 
-        std::cout << "Printing: " << i << std::endl;
+        currentCount++;
     }
+
+    std::lock_guard<std::mutex> guard(mutex);
+    std::cout << "### File: '" << file.name << "' finished!" << std::endl;
 }
 
 int main() {
-    /*
-    bool isCancelled;
-    std::thread th1 = std::thread(printTonsOfText, std::ref(isCancelled));
-    std::thread th2 = std::thread(printTonsOfText, std::ref(isCancelled));
+    std::mutex mutex;
 
-    for(int i = 0; i < 1000; i++) {
-        std::cout << "MAIN LOOP: " << i << std::endl;
+    std::vector<File> files = {
+            File("File_A.pdf", 918242),
+            File("File_B.pdf", 6123),
+            File("File_C.pdf", 456732),
+            File("File_D.pdf", 612361),
+            File("File_E.pdf", 4564),
+            File("File_F.pdf", 43),
+            File("File_G.pdf", 6343)
+    };
+
+    std::vector<std::thread> threads;
+
+    for(const auto& file : files) {
+        threads.push_back(std::thread(downloadFile, file, std::ref(mutex)));
     }
 
-    std::cout << "MAIN LOOP FINISHED!!!" << std::endl;
-    isCancelled = true;
-
-    th1.join();
-    th2.join();
-     */
-
-    int result = 0;
-
-    std::vector<Worker> workers;
-    const int numberOfTotalElements = 1000000000;
-    const int numberOfThreads = 8;
-    int numberOfElementsPerThread = numberOfTotalElements / numberOfThreads;
-    int remainingElements = numberOfTotalElements % numberOfThreads;
-
-    auto startPoint = std::chrono::steady_clock::now();
-
-    ThreadPool threadPool(2);
-
-    for(int i = 0; i < numberOfThreads; i++) {
-        int start = numberOfElementsPerThread * i;
-        int end = numberOfElementsPerThread * (i + 1);
-
-        if(i + 1 == numberOfThreads) {
-            end += remainingElements;
-        }
-
-        threadPool.startIndividual(start, end);
+    for(auto& thread : threads) {
+        thread.join();
     }
 
-    result = threadPool.awaitIndividual();
-
-    auto endPoint = std::chrono::steady_clock::now();
-    auto durationInMs = std::chrono::duration_cast<std::chrono::milliseconds>(endPoint - startPoint).count();
-
-    std::cout << "Calculation took: " << durationInMs << "ms" << std::endl;
-    std::cout << "Result: " << result << std::endl;
+    std::cout << "All files downloaded successfully!" << std::endl;
 
     return 0;
 }
