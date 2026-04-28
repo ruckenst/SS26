@@ -1,58 +1,51 @@
 #include <iostream>
-#include <mutex>
-#include <thread>
 #include <string>
-#include <vector>
 
-struct File {
+struct User {
+    int id;
     std::string name;
-    int size;
 };
 
-void downloadFile(File file, std::mutex& mutex){
-    int currentCount = 0;
-    int previousPercentage = 0;
+User* getUser(int userId) {
+    // LOADS THE USER
+    return new User(userId, "Seppl");
+}
 
-    while(currentCount < file.size) {
-        int currentPercentage = currentCount / (double)file.size * 100;
+void saveUser(User* user) {
+    // SAVE THE USER
+    int status = 500;
+    if(status != 200 || status != 201) {
+        throw std::out_of_range("Status out of range during saving");
+    }
+}
 
-        if(currentPercentage != previousPercentage) {
-            std::lock_guard<std::mutex> guard(mutex);
-            std::cout << "File: '" << file.name << "' (" << currentPercentage << "/100)" << std::endl;
-            previousPercentage = currentPercentage;
-        }
-
-        currentCount++;
+void updateUserName(int userId, std::string name) {
+    auto user = getUser(userId);
+    if(user == nullptr) {
+        // NOT FOUND
+        throw std::invalid_argument("User with id was not found");
     }
 
-    std::lock_guard<std::mutex> guard(mutex);
-    std::cout << "### File: '" << file.name << "' finished!" << std::endl;
+    user->name = name;
+
+    saveUser(user);
 }
 
 int main() {
-    std::mutex mutex;
-
-    std::vector<File> files = {
-            File("File_A.pdf", 918242),
-            File("File_B.pdf", 6123),
-            File("File_C.pdf", 456732),
-            File("File_D.pdf", 612361),
-            File("File_E.pdf", 4564),
-            File("File_F.pdf", 43),
-            File("File_G.pdf", 6343)
-    };
-
-    std::vector<std::thread> threads;
-
-    for(const auto& file : files) {
-        threads.push_back(std::thread(downloadFile, file, std::ref(mutex)));
+    try{
+        updateUserName(1, "Anna");
+    } catch(const std::invalid_argument& ex) {
+        std::cout << "The user was not found!" << std::endl;
+        return -3;
+    } catch(const std::out_of_range& ex) {
+        std::cout << "Error during saving the updated user!" << std::endl;
+        return -2;
+    } catch(...) {
+        std::cout << "Error while updating the user!" << std::endl;
+        return -1;
     }
 
-    for(auto& thread : threads) {
-        thread.join();
-    }
-
-    std::cout << "All files downloaded successfully!" << std::endl;
+    std::cout << "User updated successfully!" << std::endl;
 
     return 0;
 }
