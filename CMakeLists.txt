@@ -4,5 +4,14 @@ project(SS26)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(SS26 main.cpp
-        Test.cpp
-        Test.h)
+        Animal.cpp
+        Animal.h
+        Elephant.cpp
+        Elephant.h
+        Lion.cpp
+        Lion.h
+        Penguin.cpp
+        Penguin.h
+        Zoo.cpp
+        Zoo.h
+)

@@ -1,31 +1,45 @@
-#include <iostream>
 #include <memory>
-#include "Test.h"
+#include "Elephant.h"
+#include "Penguin.h"
+#include "Lion.h"
+#include "Zoo.h"
 
-void something(std::shared_ptr<Test>& testPointer) {
-    if(true){
-        auto myOtherSharedTest = testPointer;
-    }
-}
-
-void something(std::weak_ptr<Test> testPointer) {
-    if(true){
-        auto myOtherSharedTest = testPointer;
-    }
-}
+/*  PRÜFUNGSVORBEREITUNG (NUR SMART POINTER)
+ *  1. Klassenhierarchie
+ *     - Elternklasse: "Animal"
+ *          - Constructor, der string "name"
+ *            übernimmt und speichert
+ *          - Rein Virtuelle:
+ *            std::string getType()
+ *          - Methode:
+ *            void printStats()
+ *            "[$getType()] $name"
+ *     - Kindklassen:
+ *          - "Elephant"
+ *          - "Penguin"
+ *          - "Lion"
+ *
+ *  2. Verwaltende Klasse
+ *     - Klasse: "Zoo"
+ *          - Privater Vector: "animals"
+ *          - Methode:
+ *            void addAnimal(Animal)
+ *          - Methode:
+ *            void printZooDetails()
+ */
 
 int main() {
-    Test* myTest = new Test();
-    delete myTest;
+    Zoo myZoo;
 
-    std::shared_ptr<Test> mySharedTest = std::make_shared<Test>();
-    std::cout << "Before Function" << std::endl;
-    something(mySharedTest);
-    something(std::weak_ptr<Test>(mySharedTest));
-    std::cout << "After Function" << std::endl;
+    myZoo.addAnimal(std::make_shared<Elephant>("Sepp"));
+    myZoo.addAnimal(std::make_shared<Lion>("Anna"));
+    myZoo.addAnimal(std::make_shared<Penguin>("Mimi"));
 
-    std::unique_ptr<Test> myUniqueTest = std::make_unique<Test>();
+    myZoo.addAnimal<Elephant>("Sepp Unique");
+    myZoo.addAnimal<Lion>("Anna Unique");
+    myZoo.addAnimal<Penguin>("Mimi Unique");
 
+    myZoo.printZooDetails();
 
     return 0;
 }
